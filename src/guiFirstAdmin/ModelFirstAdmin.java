@@ -45,9 +45,11 @@ public class ModelFirstAdmin {
             ViewFirstAdmin.label_UsernameValidation.setText(error);
             return false;
         }
-        ViewFirstAdmin.label_UsernameValidation.setTextFill(Color.GREEN);
-        ViewFirstAdmin.label_UsernameValidation.setText("Valid username.");
-        return true;
+        else {
+        	ViewFirstAdmin.label_UsernameValidation.setTextFill(Color.GREEN);
+        	ViewFirstAdmin.label_UsernameValidation.setText("Valid username.");
+        	return true;
+        }
     }
 
     
@@ -68,9 +70,46 @@ public class ModelFirstAdmin {
             ViewFirstAdmin.label_PasswordsDoNotMatch.setText(lastErrorMessage);
             return false;
         }
-        ViewFirstAdmin.label_PasswordsDoNotMatch.setText("");
-        return true;
+        else {
+        	ViewFirstAdmin.label_PasswordsDoNotMatch.setText("");
+        	return true;
+        }
     }
+    
+    
+    // CODE FOR TP1 - START
+    
+    /*****
+     * <p> Method: checkPasswordStrength(String password) </p>
+     * 
+     * <p> Description: This method checks the password strength using the rules implemented 
+     * in the Model class from the PasswordEvaluatorTestbed. </p>
+     * 
+     * @param password the input string to be validated
+     * 
+     * @return true if the password is valid, false otherwise
+     */
+    protected static boolean checkPasswordStrength(String password) {
+        String strength = Model.evaluatePasswordStrength(password);
+        
+        if (strength.equals("strong")) {
+            ViewFirstAdmin.label_PasswordStrength.setTextFill(Color.GREEN);
+            ViewFirstAdmin.label_PasswordStrength.setText("The password is strong.");
+            return true;
+        }
+        else if (strength.equals("okay")) {
+        	ViewFirstAdmin.label_PasswordStrength.setTextFill(Color.ORANGE);
+            ViewFirstAdmin.label_PasswordStrength.setText("The password is okay.");
+            return true;
+        }
+        else {
+        	ViewFirstAdmin.label_PasswordStrength.setTextFill(Color.RED);
+        	ViewFirstAdmin.label_PasswordStrength.setText("The password is weak.");
+        	return false;
+        }
+    }
+    
+    // CODE FOR TP1 - END
 
     
     /*****
@@ -91,9 +130,11 @@ public class ModelFirstAdmin {
             ViewFirstAdmin.label_PasswordValidation.setText(error);
             return false;
         }
-        ViewFirstAdmin.label_PasswordValidation.setTextFill(Color.GREEN);
-        ViewFirstAdmin.label_PasswordValidation.setText("Valid password.");
-        return true;
+        else {
+        	ViewFirstAdmin.label_PasswordValidation.setTextFill(Color.GREEN);
+        	ViewFirstAdmin.label_PasswordValidation.setText("Valid password.");
+        	return true;
+        }
     }
 
     
@@ -115,6 +156,7 @@ public class ModelFirstAdmin {
         if (!validateUsername(username)) return false;
         if (!passwordsMatch(pw1, pw2)) return false;
         if (!validatePassword(pw1)) return false;
+        if (!checkPasswordStrength(pw1)) return false;
         lastErrorMessage = "";
         return true;
     }

@@ -102,7 +102,6 @@ public class Model {
 		foundLowerCase = false;				// Reset the Boolean flag
 		foundNumericDigit = false;			// Reset the Boolean flag
 		foundSpecialChar = false;			// Reset the Boolean flag
-		foundNumericDigit = false;			// Reset the Boolean flag
 		foundLongEnough = false;			// Reset the Boolean flag
 		foundTooLong = false;				// Reset the Boolean flag
 		
@@ -177,5 +176,60 @@ public class Model {
 		passwordIndexofError = currentCharNdx;
 		return errMessage;
 	}
+	
+	
+	// CODE FOR TP1 - START
+	
+	/**********
+	 * <p> Title: evaluatePasswordStrength - Public Method </p>
+	 * 
+	 * <p> Description: This method determines the overall strength of a password 
+	 *                  based on the criteria established by the FSM. 
+	 * 
+	 * <p> Rules: 
+	 * - "weak": Password is valid but only minimally meets requirements 
+	 *           (e.g., barely 8 characters, few categories).
+	 * - "okay": Password is valid, at least 8 characters, and meets at least 
+	 *           3 out of 4 categories (uppercase, lowercase, digit, special).
+	 * - "strong": Password is valid, at least 12 characters, and satisfies 
+	 *             all 4 categories. </p>
+	 * 
+	 * @param input   The input string evaluated by the method
+	 * @return        One of "weak", "okay", or "strong". 
+	 *                If invalid, error messages from evaluatePassword().
+	 */
+	
+	public static String evaluatePasswordStrength(String input) {
+		// run evaluatePassword method
+		evaluatePassword(input);
+		
+		// count categories satisfied
+		int categories = 0;
+		if (foundUpperCase) {
+			categories++;
+		}
+		if (foundLowerCase) {
+			categories++;
+		}
+		if (foundNumericDigit) {
+			categories++;
+		}
+		if (foundSpecialChar) {
+			categories++;
+		}
+		
+		int passwordLength = input.length();
+		
+		// apply strength rules
+		if (passwordLength >= 12 && categories == 4) {
+			return "strong";
+		} else if (passwordLength >= 8 && categories > 2) {
+			return "okay";
+		} else {
+			return "weak";
+		}
+	}
+	
+	// CODE FOR TP1 - END
 }
  
