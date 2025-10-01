@@ -81,7 +81,6 @@ public class ControllerFirstAdmin {
 		if (!ModelFirstAdmin.validateAll(adminUsername, adminPassword1, adminPassword2)) {
             return; // Validation failed
         }
-		
 		// Make sure the two passwords are the same
 		if (adminPassword1.compareTo(adminPassword2) == 0) {
         	// Create the passwords and proceed to the user home page

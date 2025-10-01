@@ -1,7 +1,12 @@
 package guiNewAccount;
 
-import validators.Model;
 import validators.UserNameRecognizer;
+import validators.Model;
+
+import java.sql.SQLException;
+import java.util.List;
+import java.util.ArrayList;
+import database.Database;
 import javafx.scene.paint.Color;
 
 /*******
@@ -36,6 +41,8 @@ public class ModelNewAccount {
      * 
      * @return true if the username is valid, false otherwise
      */
+    
+    
     protected static boolean validateUsername(String username) {
         String error = UserNameRecognizer.checkForValidUserName(username);
         if (!error.isEmpty()) {
@@ -46,8 +53,39 @@ public class ModelNewAccount {
         }
         ViewNewAccount.label_UsernameValidation.setTextFill(Color.GREEN);
         ViewNewAccount.label_UsernameValidation.setText("Valid username.");
-        return true;
+        return true;  //remove check to double check DB userName
     }
+    
+    // TP1 Start ****************************************
+    
+    protected static boolean validateDatabaseUsername(String username) {
+    	if(MatchingUsername(username)) { //check if userName is already in the Data Base and if so print error message
+    		lastErrorMessage = "Cannot have matching Username as another user";
+        	ViewNewAccount.label_UsernameValidation.setTextFill(Color.RED);
+        	ViewNewAccount.label_UsernameValidation.setText(lastErrorMessage);
+            return false;
+        }
+        return true;   
+    }
+    
+    protected static boolean MatchingUsername(String username) { // method to see if userName is in the Database already
+    	
+    	Database DB = new Database();				//create DB to test it out
+    	List <String> check = new ArrayList<>();  
+    	try {
+			DB.connectToDatabase(); //Connect to database to make sure its functional
+		} catch (SQLException e) {
+			e.printStackTrace();   
+		}
+    	check = DB.getUserList();
+    	if(check.contains(username)) { // IF the DB already has that userName return true
+    		return true;	
+    	}					//else let the method pass
+    	return false;
+    	
+    }
+    //	TP1 END ***************************************
+
 
     
     /*****
@@ -94,6 +132,9 @@ public class ModelNewAccount {
         ViewNewAccount.label_PasswordValidation.setText("Valid password.");
         return true;
     }
+    
+    
+    
 
     
     /*****
@@ -111,6 +152,9 @@ public class ModelNewAccount {
      */
     protected static boolean validateAll(String username, String pw1, String pw2) {
         ViewNewAccount.resetValidation();
+        
+        if (!validateDatabaseUsername(username)) return false; // added to the things to check TP1*********************
+        
         if (!validateUsername(username)) return false;
         if (!passwordsMatch(pw1, pw2)) return false;
         if (!validatePassword(pw1)) return false;

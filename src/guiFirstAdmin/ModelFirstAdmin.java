@@ -110,6 +110,7 @@ public class ModelFirstAdmin {
      * 
      * @return true if all validation checks pass, false otherwise
      */
+    
     protected static boolean validateAll(String username, String pw1, String pw2) {
         ViewFirstAdmin.resetValidation();
         if (!validateUsername(username)) return false;
