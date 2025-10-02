@@ -1,6 +1,5 @@
-module FoundationsF25 {
+module EMailInputValidator {
 	requires javafx.controls;
-	requires java.sql;
 	
-	opens applicationMain to javafx.graphics, javafx.fxml;
+	opens emailAddressTestbed to javafx.graphics, javafx.fxml;
 }
