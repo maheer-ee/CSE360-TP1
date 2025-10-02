@@ -97,6 +97,7 @@ public class ControllerNewAccount {
             // Set the database so it has this user and the current user
             theDatabase.getUserAccountDetails(username);
 
+            ViewNewAccount.resetValidation(); //Added to clear any previous inputs  TP1 ************************************
             // Navigate to the Welcome Login Page
             guiUserUpdate.ViewUserUpdate.displayUserUpdate(ViewNewAccount.theStage, user);
 		}

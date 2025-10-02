@@ -239,7 +239,7 @@ public class Database {
 		} catch (SQLException e) {
 	        return null;
 	    }
-//		System.out.println(userList);
+		System.out.println(userList);
 		return userList;
 	}
 

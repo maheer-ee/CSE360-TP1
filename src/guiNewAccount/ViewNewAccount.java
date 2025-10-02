@@ -63,6 +63,7 @@ public class ViewNewAccount {
 	protected static Alert alertUsernamePasswordError = new Alert(AlertType.INFORMATION);
 	
 	public static Label label_UsernameValidation = new Label();
+	public static Label label_UsernameDBValidation = new Label();
 	public static Label label_PasswordValidation = new Label();
 	public static Label label_PasswordStrength = new Label();
 
@@ -143,7 +144,7 @@ public class ViewNewAccount {
     	theRootPane.getChildren().addAll(label_NewUserCreation, label_NewUserLine, text_Username,
     			text_Password1, text_Password2, button_UserSetup, button_Quit,
     			label_PasswordsDoNotMatch, label_UsernameValidation, label_PasswordValidation, 
-    			label_PasswordStrength);    	
+    			label_PasswordStrength, label_UsernameDBValidation); //add lable_usernameDBvalidation);    	
 
 		// Set the title for the window, display the page, and wait for the Admin to do something
 		theStage.setTitle("CSE 360 Foundation Code: New User Account Setup");	
@@ -205,7 +206,8 @@ public class ViewNewAccount {
         button_UserSetup.setOnAction((event) -> {ControllerNewAccount.doCreateUser(); });
         
         // Validation labels
-        setupLabelUI(label_UsernameValidation, "Arial", 16, 400, Pos.BASELINE_LEFT, 50, 200);
+        setupLabelUI(label_UsernameValidation, "Arial", 16, 400, Pos.BASELINE_LEFT, 50, 200); //Label for username mismatch
+        setupLabelUI(label_UsernameDBValidation, "Arial", 16, 400, Pos.BASELINE_LEFT, 50, 200); //Label for DB mismatch
         setupLabelUI(label_PasswordStrength, "Arial", 16, 400, Pos.BASELINE_LEFT, 50, 350);
         setupLabelUI(label_PasswordValidation, "Arial", 16, 400, Pos.BASELINE_LEFT, 50, 380);
         setupLabelUI(label_PasswordsDoNotMatch, "Arial", 16, 400, Pos.BASELINE_LEFT, 50, 380);
