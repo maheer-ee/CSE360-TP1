@@ -803,6 +803,30 @@ public class Database {
 	    }
 	}
 	
+	/*******
+	 * <p> Method: void updatePassword(String username, String newPassword) </p>
+	 * 
+	 * <p> Description: Update the password of a user given that user's username and
+	 * 		the new password.</p>
+	 * 
+	 * @param username is the username of the user
+	 *  
+	 * @param newPassword is the new password for the user
+	 *  
+	 */
+	// update the password
+	public void updatePassword(String username, String newPassword) {
+        final String q = "UPDATE userDB SET password = ? WHERE userName = ?";
+        try (PreparedStatement ps = connection.prepareStatement(q)) {
+            ps.setString(1, newPassword);            // TODO: hash before storing if you add hashing
+            ps.setString(2, username);
+            ps.executeUpdate();
+            currentPassword = newPassword;           // keep cache in sync if you display it
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+	
 	
 	/*******
 	 * <p> Method: boolean getUserAccountDetails(String username) </p>
