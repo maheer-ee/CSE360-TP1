@@ -77,6 +77,7 @@ public class ViewUserUpdate {
 	private static Label label_CurrentLastName = new Label();
 	private static Label label_CurrentPreferredFirstName = new Label();
 	private static Label label_CurrentEmailAddress = new Label();
+	public static Label label_EmailAddressValidation = new Label();
 	
 	// These buttons enable the user to edit the various dynamic fields.  The username and the
 	// passwords for a user are currently not editable.
@@ -189,6 +190,8 @@ public class ViewUserUpdate {
 		s = theUser.getEmailAddress();
     	if (s == null || s.length() < 1)label_CurrentEmailAddress.setText("<none>");
     	else label_CurrentEmailAddress.setText(s);
+    	
+    	label_EmailAddressValidation.setText("");
 
 		// Set the title for the window, display the page, and wait for the Admin to do something
     	theStage.setTitle("CSE 360 Foundation Code: Update User Account Details");
@@ -333,15 +336,20 @@ public class ViewUserUpdate {
         // Email Address
         setupLabelUI(label_EmailAddress, "Arial", 18, 190, Pos.BASELINE_RIGHT, 5, 400);
         setupLabelUI(label_CurrentEmailAddress, "Arial", 18, 260, Pos.BASELINE_LEFT, 200, 400);
+        setupLabelUI(label_EmailAddressValidation, "Arial", 14, 400, Pos.BASELINE_LEFT, 50, 430);
         setupButtonUI(button_UpdateEmailAddress, "Dialog", 18, 275, Pos.CENTER, 500, 393);
         button_UpdateEmailAddress.setOnAction((event) -> {result = dialogUpdateEmailAddresss.showAndWait();
-    		result.ifPresent(name -> theDatabase.updateEmailAddress(theUser.getUserName(), result.get()));
+        	result.ifPresent(email -> {
+    		if(Model.validateEmailAddress(email)) {
+    		theDatabase.updateEmailAddress(theUser.getUserName(), email);
     		theDatabase.getUserAccountDetails(theUser.getUserName());
     		String newEmail = theDatabase.getCurrentEmailAddress();
            	theUser.setEmailAddress(newEmail);
         	if (newEmail == null || newEmail.length() < 1)label_CurrentEmailAddress.setText("<none>");
         	else label_CurrentEmailAddress.setText(newEmail);
- 			});
+    		}
+    		});
+ 		});
         
         // Set up the button to proceed to this user's home page
         setupButtonUI(button_ProceedToUserHomePage, "Dialog", 18, 300, 
@@ -360,7 +368,7 @@ public class ViewUserUpdate {
         		label_LastName, label_CurrentLastName, button_UpdateLastName,
         		label_PreferredFirstName, label_CurrentPreferredFirstName,
         		button_UpdatePreferredFirstName, button_UpdateEmailAddress,
-        		label_EmailAddress, label_CurrentEmailAddress, 
+        		label_EmailAddress, label_CurrentEmailAddress, label_EmailAddressValidation,
         		button_ProceedToUserHomePage);
 	}
 	
