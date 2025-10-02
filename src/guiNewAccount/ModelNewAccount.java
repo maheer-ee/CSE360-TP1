@@ -70,6 +70,41 @@ public class ModelNewAccount {
         ViewNewAccount.label_PasswordsDoNotMatch.setText("");
         return true;
     }
+    
+    
+    // CODE FOR TP1 - START
+    
+    /*****
+     * <p> Method: checkPasswordStrength(String password) </p>
+     * 
+     * <p> Description: This method checks the password strength using the rules implemented 
+     * in the Model class from the PasswordEvaluatorTestbed. </p>
+     * 
+     * @param password the input string to be validated
+     * 
+     * @return true if the password is valid, false otherwise
+     */
+    protected static boolean checkPasswordStrength(String password) {
+        String strength = Model.evaluatePasswordStrength(password);
+        
+        if (strength.equals("strong")) {
+            ViewNewAccount.label_PasswordStrength.setTextFill(Color.GREEN);
+            ViewNewAccount.label_PasswordStrength.setText("The password is strong.");
+            return true;
+        }
+        else if (strength.equals("okay")) {
+        	ViewNewAccount.label_PasswordStrength.setTextFill(Color.ORANGE);
+            ViewNewAccount.label_PasswordStrength.setText("The password is okay.");
+            return true;
+        }
+        else {
+        	ViewNewAccount.label_PasswordStrength.setTextFill(Color.RED);
+        	ViewNewAccount.label_PasswordStrength.setText("The password is weak.");
+        	return false;
+        }
+    }
+    
+    // CODE FOR TP1 - END
 
     
     /*****

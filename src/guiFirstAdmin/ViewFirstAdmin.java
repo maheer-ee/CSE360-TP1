@@ -67,6 +67,7 @@ public class ViewFirstAdmin {
 	
 	public static Label label_UsernameValidation = new Label();
 	public static Label label_PasswordValidation = new Label();
+	public static Label label_PasswordStrength = new Label();
 
 	// This button allow the user to abort creating the first admin account and terminate
 	private static Button button_Quit = new Button("Quit");
@@ -168,7 +169,8 @@ public class ViewFirstAdmin {
 				true);
 		text_AdminPassword1.setPromptText("Enter Admin Password");
 		text_AdminPassword1.textProperty().addListener((observable, oldValue, newValue)
-				-> {ControllerFirstAdmin.setAdminPassword1(); });
+				-> {ControllerFirstAdmin.setAdminPassword1();
+					ModelFirstAdmin.checkPasswordStrength(newValue); });	// update strength live
 
 		// Establish the text input operand field to confirm the password
 		setupTextUI(text_AdminPassword2, "Arial", 18, 300, Pos.BASELINE_LEFT, 50, 300, 
@@ -185,8 +187,9 @@ public class ViewFirstAdmin {
 		
 		// Validation labels
         setupLabelUI(label_UsernameValidation, "Arial", 16, 400, Pos.BASELINE_LEFT, 50, 200);
-        setupLabelUI(label_PasswordValidation, "Arial", 16, 400, Pos.BASELINE_LEFT, 50, 350);
-        setupLabelUI(label_PasswordsDoNotMatch, "Arial", 16, 400, Pos.BASELINE_LEFT, 50, 350);
+        setupLabelUI(label_PasswordStrength, "Arial", 16, 400, Pos.BASELINE_LEFT, 50, 350);
+        setupLabelUI(label_PasswordValidation, "Arial", 16, 400, Pos.BASELINE_LEFT, 50, 380);
+        setupLabelUI(label_PasswordsDoNotMatch, "Arial", 16, 400, Pos.BASELINE_LEFT, 50, 380);
 
         // Set up the Quit button
 		setupButtonUI(button_Quit, "Dialog", 18, 250, Pos.CENTER, 300, 520);
@@ -196,7 +199,8 @@ public class ViewFirstAdmin {
 		theRootPane.getChildren().addAll(label_ApplicationTitle, label_TitleLine1,
 				label_TitleLine2, text_AdminUsername, text_AdminPassword1, 
 				text_AdminPassword2, button_AdminSetup, label_PasswordsDoNotMatch,
-				button_Quit, label_UsernameValidation, label_PasswordValidation);
+				button_Quit, label_UsernameValidation, label_PasswordValidation,
+				label_PasswordStrength);
 	}
 	
 	/*****
@@ -206,6 +210,7 @@ public class ViewFirstAdmin {
      */
     public static void resetValidation() {
         label_UsernameValidation.setText("");
+        label_PasswordStrength.setText("");						// password strength
         label_PasswordValidation.setText("");
         label_PasswordsDoNotMatch.setText("");
     }
