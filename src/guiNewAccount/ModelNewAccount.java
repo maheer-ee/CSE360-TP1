@@ -2,10 +2,6 @@ package guiNewAccount;
 
 import validators.Model;
 import validators.UserNameRecognizer;
-import java.sql.SQLException;
-import java.util.List;
-import java.util.ArrayList;
-import database.Database;
 import javafx.scene.paint.Color;
 
 /*******
@@ -50,41 +46,8 @@ public class ModelNewAccount {
         }
         ViewNewAccount.label_UsernameValidation.setTextFill(Color.GREEN);
         ViewNewAccount.label_UsernameValidation.setText("Valid username.");
-        return true;  //remove check to double check DB userName
+        return true;
     }
-    
-
-    // TP1 Start ****************************************
-
-    protected static boolean validateDatabaseUsername(String username) {
-    	if(MatchingUsername(username)) { //check if userName is already in the Data Base and if so print error message
-    		lastErrorMessage = "Cannot have matching Username as another user";
-        	ViewNewAccount.label_UsernameValidation.setTextFill(Color.RED);
-        	ViewNewAccount.label_UsernameValidation.setText(lastErrorMessage);
-            return false;
-        }
-        return true;   
-    }
-
-    protected static boolean MatchingUsername(String username) { // method to see if userName is in the Database already
-
-    	Database DB = new Database();				//create DB to test it out
-    	List <String> check = new ArrayList<>();  
-    	try {
-			DB.connectToDatabase(); //Connect to database to make sure its functional
-		} catch (SQLException e) {
-			e.printStackTrace();   
-		}
-    	check = DB.getUserList();
-    	if(check.contains(username)) { // IF the DB already has that userName return true
-    		return true;	
-    	}					//else let the method pass
-    	return false;
-
-    }
-    //	TP1 END ***************************************
-
-
 
     
     /*****
@@ -107,41 +70,6 @@ public class ModelNewAccount {
         ViewNewAccount.label_PasswordsDoNotMatch.setText("");
         return true;
     }
-    
-    
-    // CODE FOR TP1 - START
-    
-    /*****
-     * <p> Method: checkPasswordStrength(String password) </p>
-     * 
-     * <p> Description: This method checks the password strength using the rules implemented 
-     * in the Model class from the PasswordEvaluatorTestbed. </p>
-     * 
-     * @param password the input string to be validated
-     * 
-     * @return true if the password is valid, false otherwise
-     */
-    protected static boolean checkPasswordStrength(String password) {
-        String strength = Model.evaluatePasswordStrength(password);
-        
-        if (strength.equals("strong")) {
-            ViewNewAccount.label_PasswordStrength.setTextFill(Color.GREEN);
-            ViewNewAccount.label_PasswordStrength.setText("The password is strong.");
-            return true;
-        }
-        else if (strength.equals("okay")) {
-        	ViewNewAccount.label_PasswordStrength.setTextFill(Color.ORANGE);
-            ViewNewAccount.label_PasswordStrength.setText("The password is okay.");
-            return true;
-        }
-        else {
-        	ViewNewAccount.label_PasswordStrength.setTextFill(Color.RED);
-        	ViewNewAccount.label_PasswordStrength.setText("The password is weak.");
-        	return false;
-        }
-    }
-    
-    // CODE FOR TP1 - END
 
     
     /*****
@@ -183,8 +111,6 @@ public class ModelNewAccount {
      */
     protected static boolean validateAll(String username, String pw1, String pw2) {
         ViewNewAccount.resetValidation();
-
-        if (!validateDatabaseUsername(username)) return false; // added to the things to check TP1*********************
         if (!validateUsername(username)) return false;
         if (!passwordsMatch(pw1, pw2)) return false;
         if (!validatePassword(pw1)) return false;

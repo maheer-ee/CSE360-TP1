@@ -63,9 +63,7 @@ public class ViewNewAccount {
 	protected static Alert alertUsernamePasswordError = new Alert(AlertType.INFORMATION);
 	
 	public static Label label_UsernameValidation = new Label();
-	public static Label label_UsernameDBValidation = new Label();
 	public static Label label_PasswordValidation = new Label();
-	public static Label label_PasswordStrength = new Label();
 
     protected static Button button_Quit = new Button("Quit");
 
@@ -143,8 +141,7 @@ public class ViewNewAccount {
     	theRootPane.getChildren().clear();
     	theRootPane.getChildren().addAll(label_NewUserCreation, label_NewUserLine, text_Username,
     			text_Password1, text_Password2, button_UserSetup, button_Quit,
-    			label_PasswordsDoNotMatch, label_UsernameValidation, label_PasswordValidation, 
-    			label_PasswordStrength, label_UsernameDBValidation); //add lable_usernameDBvalidation);    	
+    			label_PasswordsDoNotMatch, label_UsernameValidation, label_PasswordValidation);    	
 
 		// Set the title for the window, display the page, and wait for the Admin to do something
 		theStage.setTitle("CSE 360 Foundation Code: New User Account Setup");	
@@ -184,8 +181,6 @@ public class ViewNewAccount {
 		// Establish the text input operand field for the password
 		setupTextUI(text_Password1, "Arial", 18, 300, Pos.BASELINE_LEFT, 50, 230, true);
 		text_Password1.setPromptText("Enter the Password");
-		text_Password1.textProperty().addListener((observable, oldValue, newValue)
-				-> { ModelNewAccount.checkPasswordStrength(newValue); });	// update strength live
 		
 		// Establish the text input operand field to confirm the password
 		setupTextUI(text_Password2, "Arial", 18, 300, Pos.BASELINE_LEFT, 50, 300, true);
@@ -206,11 +201,9 @@ public class ViewNewAccount {
         button_UserSetup.setOnAction((event) -> {ControllerNewAccount.doCreateUser(); });
         
         // Validation labels
-        setupLabelUI(label_UsernameValidation, "Arial", 16, 400, Pos.BASELINE_LEFT, 50, 200); //Label for username mismatch
-        setupLabelUI(label_UsernameDBValidation, "Arial", 16, 400, Pos.BASELINE_LEFT, 50, 200); //Label for DB mismatch
-        setupLabelUI(label_PasswordStrength, "Arial", 16, 400, Pos.BASELINE_LEFT, 50, 350);
-        setupLabelUI(label_PasswordValidation, "Arial", 16, 400, Pos.BASELINE_LEFT, 50, 380);
-        setupLabelUI(label_PasswordsDoNotMatch, "Arial", 16, 400, Pos.BASELINE_LEFT, 50, 380);
+        setupLabelUI(label_UsernameValidation, "Arial", 16, 400, Pos.BASELINE_LEFT, 50, 200);
+        setupLabelUI(label_PasswordValidation, "Arial", 16, 400, Pos.BASELINE_LEFT, 50, 350);
+        setupLabelUI(label_PasswordsDoNotMatch, "Arial", 16, 400, Pos.BASELINE_LEFT, 50, 350);
 		
         // Enable the user to quit the application
         setupButtonUI(button_Quit, "Dialog", 18, 250, Pos.CENTER, 300, 520);
@@ -224,7 +217,6 @@ public class ViewNewAccount {
      */
     public static void resetValidation() {
         label_UsernameValidation.setText("");
-        label_PasswordStrength.setText("");						// password strength
         label_PasswordValidation.setText("");
         label_PasswordsDoNotMatch.setText("");
     }
