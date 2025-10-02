@@ -60,13 +60,14 @@ public class ViewFirstAdmin {
 	protected static TextField text_AdminUsername = new TextField();
 	protected static PasswordField text_AdminPassword1 = new PasswordField();
 	protected static PasswordField text_AdminPassword2 = new PasswordField();
+	public static TextField text_AdminPhoneNumber = new TextField();
+	protected static Label label_PhoneValidation = new Label();
+
+
 	private static Button button_AdminSetup = new Button("Setup Admin Account");
 
 	// This alert is used should the user enter two passwords that do not match
 	protected static Alert alertUsernamePasswordError = new Alert(AlertType.INFORMATION);
-	
-	public static Label label_UsernameValidation = new Label();
-	public static Label label_PasswordValidation = new Label();
 
 	// This button allow the user to abort creating the first admin account and terminate
 	private static Button button_Quit = new Button("Quit");
@@ -164,51 +165,48 @@ public class ViewFirstAdmin {
 				-> {ControllerFirstAdmin.setAdminUsername(); });
 
 		// Establish the text input operand field for the password
-		setupTextUI(text_AdminPassword1, "Arial", 18, 300, Pos.BASELINE_LEFT, 50, 230, 
+		setupTextUI(text_AdminPassword1, "Arial", 18, 300, Pos.BASELINE_LEFT, 50, 210, 
 				true);
 		text_AdminPassword1.setPromptText("Enter Admin Password");
 		text_AdminPassword1.textProperty().addListener((observable, oldValue, newValue)
 				-> {ControllerFirstAdmin.setAdminPassword1(); });
 
-		// Establish the text input operand field to confirm the password
-		setupTextUI(text_AdminPassword2, "Arial", 18, 300, Pos.BASELINE_LEFT, 50, 300, 
+		// Establish the text input operand field for the password
+		setupTextUI(text_AdminPassword2, "Arial", 18, 300, Pos.BASELINE_LEFT, 50, 260, 
 				true);
 		text_AdminPassword2.setPromptText("Enter Admin Password Again");
 		text_AdminPassword2.textProperty().addListener((observable, oldValue, newValue) 
 				-> {ControllerFirstAdmin.setAdminPassword2(); });
+		
+		setupTextUI(text_AdminPhoneNumber, "Arial", 18, 300, Pos.BASELINE_LEFT, 50, 310, true);
+		text_AdminPhoneNumber.setPromptText("Enter Admin Phone Number");
+		text_AdminPhoneNumber.textProperty().addListener((observable, oldValue, newValue) -> {
+		    ControllerFirstAdmin.setAdminPhoneNumber(); 
+		    validatePhoneNumber(newValue);});
+
+
 
 		// Set up the Log In button
-		setupButtonUI(button_AdminSetup, "Dialog", 18, 200, Pos.CENTER, 475, 230);
+		setupButtonUI(button_AdminSetup, "Dialog", 18, 200, Pos.CENTER, 475, 210);
 		button_AdminSetup.setOnAction((event) -> {
 			ControllerFirstAdmin.doSetupAdmin(theStage,1); 
 			});
-		
-		// Validation labels
-        setupLabelUI(label_UsernameValidation, "Arial", 16, 400, Pos.BASELINE_LEFT, 50, 200);
-        setupLabelUI(label_PasswordValidation, "Arial", 16, 400, Pos.BASELINE_LEFT, 50, 350);
-        setupLabelUI(label_PasswordsDoNotMatch, "Arial", 16, 400, Pos.BASELINE_LEFT, 50, 350);
 
-        // Set up the Quit button
+		// Label to display the Passwords do not match error message
+		setupLabelUI(label_PasswordsDoNotMatch, "Arial", 18, width, Pos.CENTER, 0, 300);
+
 		setupButtonUI(button_Quit, "Dialog", 18, 250, Pos.CENTER, 300, 520);
 		button_Quit.setOnAction((event) -> {ControllerFirstAdmin.performQuit(); });
+		
+		setupLabelUI(label_PhoneValidation, "Arial", 16, width, Pos.CENTER_LEFT, 50, 350);
+
 
 		// Place all of the just-initialized GUI elements into the pane
 		theRootPane.getChildren().addAll(label_ApplicationTitle, label_TitleLine1,
-				label_TitleLine2, text_AdminUsername, text_AdminPassword1, 
+				label_TitleLine2, text_AdminUsername,text_AdminPhoneNumber,label_PhoneValidation, text_AdminPassword1, 
 				text_AdminPassword2, button_AdminSetup, label_PasswordsDoNotMatch,
-				button_Quit, label_UsernameValidation, label_PasswordValidation);
+				button_Quit);
 	}
-	
-	/*****
-     * <p> Method: resetValidation() </p>
-     * 
-     * <p> Description: This method clears all validation feedback labels. </p>
-     */
-    public static void resetValidation() {
-        label_UsernameValidation.setText("");
-        label_PasswordValidation.setText("");
-        label_PasswordsDoNotMatch.setText("");
-    }
 	
 	
 	/*-********************************************************************************************
@@ -228,6 +226,29 @@ public class ViewFirstAdmin {
 	 * @param x		The location from the left edge (x axis)
 	 * @param y		The location from the top (y axis)
 	 */
+	
+	private void validatePhoneNumber(String input) {
+	    if (!input.matches("\\d*")) {  
+	        // contains non-digits
+	        label_PhoneValidation.setText("❌ Only digits allowed!");
+	        label_PhoneValidation.setStyle("-fx-text-fill: red;");
+	    } 
+	    else if (input.length() < 10) {  
+	        // fewer than 10 digits
+	        label_PhoneValidation.setText("⚠ Must be 10 digits");
+	        label_PhoneValidation.setStyle("-fx-text-fill: orange;");
+	    } 
+	    else if (input.length() == 10) {  
+	        // valid number
+	        label_PhoneValidation.setText("✔ Valid phone number");
+	        label_PhoneValidation.setStyle("-fx-text-fill: green;");
+	    } 
+	    else {  
+	        // more than 10 digits
+	        label_PhoneValidation.setText("❌ Too many digits (must be 10)");
+	        label_PhoneValidation.setStyle("-fx-text-fill: red;");
+	    }
+	}
 
 	private void setupLabelUI(Label l, String ff, double f, double w, Pos p, double x, double y){
 		l.setFont(Font.font(ff, f));

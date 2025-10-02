@@ -47,23 +47,22 @@ public class ViewNewAccount {
 	// invitation to the potential user.
 	private static Label label_ApplicationTitle = 
 			new Label("Foundation Application Account Setup Page");
-    protected static Label label_NewUserCreation = new Label(" User Account Creation.");
     protected static Label label_NewUserLine = new Label("Please enter a username and a password.");
-    protected static Label label_PasswordsDoNotMatch = new Label();
     protected static TextField text_Username = new TextField();
     protected static PasswordField text_Password1 = new PasswordField();
     protected static PasswordField text_Password2 = new PasswordField();
     protected static Button button_UserSetup = new Button("User Setup");
     protected static TextField text_Invitation = new TextField();
+	protected static TextField text_PhoneNumber = new TextField();
+
+    protected static Label label_PhoneValidation = new Label();
+
 
 	// This alert is used should the invitation code be invalid
     protected static Alert alertInvitationCodeIsInvalid = new Alert(AlertType.INFORMATION);
 
 	// This alert is used should the user enter two passwords that do not match
 	protected static Alert alertUsernamePasswordError = new Alert(AlertType.INFORMATION);
-	
-	public static Label label_UsernameValidation = new Label();
-	public static Label label_PasswordValidation = new Label();
 
     protected static Button button_Quit = new Button("Quit");
 
@@ -82,6 +81,7 @@ public class ViewNewAccount {
     protected static String emailAddress;		// Established here for use by the controller
     protected static String theRole;			// Established here for use by the controller
 	public static Scene theNewAccountScene = null;	// Access to the User Update page's GUI Widgets
+	
 	
 
 	/*-********************************************************************************************
@@ -120,11 +120,16 @@ public class ViewNewAccount {
 		theStage = ps;				// Save the reference to the Stage for the rest of this package
 		theInvitationCode = ic;		// Establish the invitation code so it can be easily accessed
 		
-		if (theView == null) theView = new ViewNewAccount();
+		theView = new ViewNewAccount();
+
 		
 		text_Username.setText("");	// Clear the input fields so previously entered values do not
 		text_Password1.setText("");	// appear for a new user
 		text_Password2.setText("");
+	    text_PhoneNumber.setText("");
+
+	    label_PhoneValidation.setText("");
+
 		
 		// Fetch the role for this user
 		theRole = theDatabase.getRoleGivenAnInvitationCode(theInvitationCode);
@@ -137,11 +142,17 @@ public class ViewNewAccount {
 		// Get the email address associated with the invitation code
 		emailAddress = theDatabase.getEmailAddressUsingCode(theInvitationCode);
 		
+
+		
     	// Place all of the established GUI elements into the pane
     	theRootPane.getChildren().clear();
-    	theRootPane.getChildren().addAll(label_NewUserCreation, label_NewUserLine, text_Username,
-    			text_Password1, text_Password2, button_UserSetup, button_Quit,
-    			label_PasswordsDoNotMatch, label_UsernameValidation, label_PasswordValidation);    	
+    	theRootPane.getChildren().addAll(
+    		    label_ApplicationTitle, label_NewUserLine,
+    		    text_Username, text_Password1, text_Password2,
+    		    text_PhoneNumber, label_PhoneValidation,
+    		    button_UserSetup, button_Quit
+    		);
+
 
 		// Set the title for the window, display the page, and wait for the Admin to do something
 		theStage.setTitle("CSE 360 Foundation Code: New User Account Setup");	
@@ -164,12 +175,13 @@ public class ViewNewAccount {
 		// Create the Pane for the list of widgets and the Scene for the window
 		theRootPane = new Pane();
 		theNewAccountScene = new Scene(theRootPane, width, height);
+		
 
-		// Label the Panel with the name of the startup screen, centered at the top of the pane
-		setupLabelUI(label_ApplicationTitle, "Arial", 28, width, Pos.CENTER, 0, 10);
+
+		// Label the Panle with the name of the startup screen, centered at the top of the pane
+		setupLabelUI(label_ApplicationTitle, "Arial", 28, width, Pos.CENTER, 0, 5);
 		
     	// Label to display the welcome message for the new user
-    	setupLabelUI(label_NewUserCreation, "Arial", 32, width, Pos.CENTER, 0, 15);
 	
     	// Label to display the  message for the first user
     	setupLabelUI(label_NewUserLine, "Arial", 24, width, Pos.CENTER, 0, 70);
@@ -179,11 +191,11 @@ public class ViewNewAccount {
 		text_Username.setPromptText("Enter the Username");
 		
 		// Establish the text input operand field for the password
-		setupTextUI(text_Password1, "Arial", 18, 300, Pos.BASELINE_LEFT, 50, 230, true);
+		setupTextUI(text_Password1, "Arial", 18, 300, Pos.BASELINE_LEFT, 50, 210, true);
 		text_Password1.setPromptText("Enter the Password");
 		
 		// Establish the text input operand field to confirm the password
-		setupTextUI(text_Password2, "Arial", 18, 300, Pos.BASELINE_LEFT, 50, 300, true);
+		setupTextUI(text_Password2, "Arial", 18, 300, Pos.BASELINE_LEFT, 50, 260, true);
 		text_Password2.setPromptText("Enter the Password Again");
 		
 		// If the invitation code is wrong, this alert dialog will tell the user
@@ -197,29 +209,25 @@ public class ViewNewAccount {
 		alertUsernamePasswordError.setContentText("Correct the passwords and try again.");
 
         // Set up the account creation and login
-        setupButtonUI(button_UserSetup, "Dialog", 18, 200, Pos.CENTER, 475, 230);
+        setupButtonUI(button_UserSetup, "Dialog", 18, 200, Pos.CENTER, 475, 210);
         button_UserSetup.setOnAction((event) -> {ControllerNewAccount.doCreateUser(); });
-        
-        // Validation labels
-        setupLabelUI(label_UsernameValidation, "Arial", 16, 400, Pos.BASELINE_LEFT, 50, 200);
-        setupLabelUI(label_PasswordValidation, "Arial", 16, 400, Pos.BASELINE_LEFT, 50, 350);
-        setupLabelUI(label_PasswordsDoNotMatch, "Arial", 16, 400, Pos.BASELINE_LEFT, 50, 350);
 		
         // Enable the user to quit the application
-        setupButtonUI(button_Quit, "Dialog", 18, 250, Pos.CENTER, 300, 520);
+        setupButtonUI(button_Quit, "Dialog", 18, 250, Pos.CENTER, 300, 540);
         button_Quit.setOnAction((event) -> {ControllerNewAccount.performQuit(); });
+        
+        setupTextUI(text_PhoneNumber, "Arial", 18, 300, Pos.BASELINE_LEFT, 50, 310, true);
+        text_PhoneNumber.setPromptText("Enter Phone Number (10 digits)");
+
+        setupLabelUI(label_PhoneValidation, "Arial", 16, 400, Pos.BASELINE_LEFT, 50, 340);
+
+		text_PhoneNumber.textProperty().addListener((observable, oldValue, newValue) -> {
+		    validatePhoneNumber(newValue);
+		});
+
+
+
 	}
-	
-	/*****
-     * <p> Method: resetValidation() </p>
-     * 
-     * <p> Description: This method clears all validation feedback labels. </p>
-     */
-    public static void resetValidation() {
-        label_UsernameValidation.setText("");
-        label_PasswordValidation.setText("");
-        label_PasswordsDoNotMatch.setText("");
-    }
 	
 	
 	/*-********************************************************************************************
@@ -230,7 +238,26 @@ public class ViewNewAccount {
 	
 	/**********
 	 * Private local method to initialize the standard fields for a label
+	 * 
 	 */
+	private void validatePhoneNumber(String input) {
+	    if (!input.matches("\\d*")) {
+	        label_PhoneValidation.setText("❌ Only digits allowed!");
+	        label_PhoneValidation.setStyle("-fx-text-fill: red;");
+	    } else if (input.length() == 0) {
+	        label_PhoneValidation.setText("");
+	    } else if (input.length() < 10) {
+	        label_PhoneValidation.setText("⚠ Must be 10 digits");
+	        label_PhoneValidation.setStyle("-fx-text-fill: orange;");
+	    } else if (input.length() == 10) {
+	        label_PhoneValidation.setText("✔ Valid phone number");
+	        label_PhoneValidation.setStyle("-fx-text-fill: green;");
+	    } else {
+	        label_PhoneValidation.setText("❌ Too many digits (must be 10)");
+	        label_PhoneValidation.setStyle("-fx-text-fill: red;");
+	    }
+	}
+
 	
 	private void setupLabelUI(Label l, String ff, double f, double w, Pos p, double x, double y){
 		l.setFont(Font.font(ff, f));

@@ -4,6 +4,8 @@ import java.sql.SQLException;
 
 import database.Database;
 import entityClasses.User;
+import javafx.scene.control.Alert; 
+import javafx.scene.control.Alert.AlertType;
 
 public class ControllerNewAccount {
 	
@@ -37,8 +39,9 @@ public class ControllerNewAccount {
 		// Fetch the username and password. (We use the first of the two here, but we will validate
 		// that the two password fields are the same before we do anything with it.)
 		String username = ViewNewAccount.text_Username.getText();
-		String password1 = ViewNewAccount.text_Password1.getText();
-		String password2 = ViewNewAccount.text_Password2.getText();
+		String password = ViewNewAccount.text_Password1.getText();
+		String phone = ViewNewAccount.text_PhoneNumber.getText();
+
 		
 		// Display key information to the log
 		System.out.println("** Account for Username: " + username + "; theInvitationCode: "+
@@ -48,10 +51,15 @@ public class ControllerNewAccount {
 		// Initialize local variables that will be created during this process
 		int roleCode = 0;
 		User user = null;
-		
-		if (!ModelNewAccount.validateAll(username, password1, password2)) {
-            return; // Validation failed
-        }
+		if (phone == null || !phone.matches("\\d{10}")) {        
+		    System.out.println("Invalid phone number entered: " + phone); 
+		    Alert alert = new Alert(AlertType.ERROR);              
+		    alert.setTitle("Invalid Phone Number");                
+		    alert.setHeaderText("Phone number must be 10 digits"); 
+		    alert.setContentText("Please enter a valid phone number without spaces or dashes."); 
+		    alert.showAndWait();                                  
+		    return;                                                
+		}  
 
 		// Make sure the two passwords are the same.	
 		if (ViewNewAccount.text_Password1.getText().
@@ -61,21 +69,23 @@ public class ControllerNewAccount {
 			// information provided in the invitation
 			if (ViewNewAccount.theRole.compareTo("Admin") == 0) {
 				roleCode = 1;
-				user = new User(username, password1, "", "", "", "", "", true, false, false);
+				user = new User(username, password, "", "", "", "", "", true, false, false);
 			} else if (ViewNewAccount.theRole.compareTo("Role1") == 0) {
 				roleCode = 2;
-				user = new User(username, password1, "", "", "", "", "", false, true, false);
+				user = new User(username, password, "", "", "", "", "", false, true, false);
 			} else if (ViewNewAccount.theRole.compareTo("Role2") == 0) {
 				roleCode = 3;
-				user = new User(username, password1, "", "", "", "", "", false, false, true);
+				user = new User(username, password, "", "", "", "", "", false, false, true);
 			} else {
 				System.out.println(
 						"**** Trying to create a New Account for a role that does not exist!");
 				System.exit(0);
 			}
 			
+			
 			// Unlike the FirstAdmin, we know the email address, so set that into the user as well.
         	user.setEmailAddress(ViewNewAccount.emailAddress);
+        	user.setPhoneNumber(phone); 
 
         	// Inform the system about which role will be played
 			applicationMain.FoundationsMain.activeHomePage = roleCode;

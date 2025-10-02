@@ -19,6 +19,8 @@ public class ControllerFirstAdmin {
 	private static String adminUsername = "";
 	private static String adminPassword1 = "";
 	private static String adminPassword2 = "";		
+	private static String adminPhoneNumber = "";
+
 	protected static Database theDatabase = applicationMain.FoundationsMain.database;		
 
 	/*-********************************************************************************************
@@ -65,6 +67,11 @@ public class ControllerFirstAdmin {
 		ViewFirstAdmin.label_PasswordsDoNotMatch.setText("");
 	}
 	
+	protected static void setAdminPhoneNumber() {
+	    adminPhoneNumber = ViewFirstAdmin.text_AdminPhoneNumber.getText();
+	}
+
+	
 	
 	/**********
 	 * <p> Method: doSetupAdmin() </p>
@@ -73,20 +80,18 @@ public class ControllerFirstAdmin {
 	 * account.  It start by trying to establish a new user and placing that user into the
 	 * database.  If that is successful, we proceed to the UserUpdate page.</p>
 	 * 
-	 * @param stage the JavaFX Stage for this GUI
-     * @param role the role for the Admin (1 = Admin)
 	 */
 	protected static void doSetupAdmin(Stage ps, int r) {
-		
-		if (!ModelFirstAdmin.validateAll(adminUsername, adminPassword1, adminPassword2)) {
-            return; // Validation failed
-        }
 		
 		// Make sure the two passwords are the same
 		if (adminPassword1.compareTo(adminPassword2) == 0) {
         	// Create the passwords and proceed to the user home page
-        	User user = new User(adminUsername, adminPassword1, "", "", "", "", "", true, false, 
-        			false);
+			User user = new User(adminUsername, adminPassword1, "", "", "", "", "", true, false, false);
+			user.setPhoneNumber(adminPhoneNumber);
+
+
+			
+			
             try {
             	// Create a new User object with admin role and register in the database
             	theDatabase.register(user);
@@ -125,4 +130,3 @@ public class ControllerFirstAdmin {
 		System.exit(0);
 	}	
 }
-
