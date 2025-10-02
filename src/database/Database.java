@@ -540,6 +540,26 @@ public class Database {
 		return;
 	}
 	
+	/*******
+	 * <p> Method: boolean deleteUserAccount(String username) </p>
+	 * 
+	 * <p> Description: Delete a user account from the system.</p>
+	 * 
+	 * @param username is the username of the user to be deleted.
+	 *  
+	 */
+	//Delete USER
+		public boolean deleteUserAccount(String username) {
+		    String sql = "DELETE FROM userDB WHERE userName = ?";
+		    try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+		        pstmt.setString(1, username);
+		        return pstmt.executeUpdate() > 0;
+		    } catch (SQLException e) {
+		        e.printStackTrace();
+		        return false;
+		    }
+		}
+	
 	
 	/*******
 	 * <p> Method: String getFirstName(String username) </p>
