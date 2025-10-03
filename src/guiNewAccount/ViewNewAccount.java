@@ -55,6 +55,9 @@ public class ViewNewAccount {
     protected static PasswordField text_Password2 = new PasswordField();
     protected static Button button_UserSetup = new Button("User Setup");
     protected static TextField text_Invitation = new TextField();
+	protected static TextField text_PhoneNumber = new TextField();
+    protected static Label label_PhoneValidation = new Label();
+
 
 	// This alert is used should the invitation code be invalid
     protected static Alert alertInvitationCodeIsInvalid = new Alert(AlertType.INFORMATION);
@@ -127,6 +130,8 @@ public class ViewNewAccount {
 		text_Username.setText("");	// Clear the input fields so previously entered values do not
 		text_Password1.setText("");	// appear for a new user
 		text_Password2.setText("");
+	    text_PhoneNumber.setText("");
+	    label_PhoneValidation.setText("");
 		
 		// Fetch the role for this user
 		theRole = theDatabase.getRoleGivenAnInvitationCode(theInvitationCode);
@@ -142,7 +147,7 @@ public class ViewNewAccount {
     	// Place all of the established GUI elements into the pane
     	theRootPane.getChildren().clear();
     	theRootPane.getChildren().addAll(label_NewUserCreation, label_NewUserLine, text_Username,
-    			text_Password1, text_Password2, button_UserSetup, button_Quit,
+    			text_Password1, text_Password2, text_PhoneNumber, label_PhoneValidation, button_UserSetup, button_Quit,
     			label_PasswordsDoNotMatch, label_UsernameValidation, label_PasswordValidation, 
     			label_PasswordStrength, label_UsernameDBValidation); //add lable_usernameDBvalidation);    	
 
@@ -215,6 +220,15 @@ public class ViewNewAccount {
         // Enable the user to quit the application
         setupButtonUI(button_Quit, "Dialog", 18, 250, Pos.CENTER, 300, 520);
         button_Quit.setOnAction((event) -> {ControllerNewAccount.performQuit(); });
+	
+        setupTextUI(text_PhoneNumber, "Arial", 18, 300, Pos.BASELINE_LEFT, 50, 310, true);
+        text_PhoneNumber.setPromptText("Enter Phone Number (10 digits)");
+
+        setupLabelUI(label_PhoneValidation, "Arial", 16, 400, Pos.BASELINE_LEFT, 50, 340);
+
+		text_PhoneNumber.textProperty().addListener((observable, oldValue, newValue) -> {
+		    validatePhoneNumber(newValue);
+		});
 	}
 	
 	/*****
@@ -222,6 +236,25 @@ public class ViewNewAccount {
      * 
      * <p> Description: This method clears all validation feedback labels. </p>
      */
+
+	private void validatePhoneNumber(String input) {
+	    if (!input.matches("\\d*")) {
+	        label_PhoneValidation.setText("❌ Only digits allowed!");
+	        label_PhoneValidation.setStyle("-fx-text-fill: red;");
+	    } else if (input.length() == 0) {
+	        label_PhoneValidation.setText("");
+	    } else if (input.length() < 10) {
+	        label_PhoneValidation.setText("⚠ Must be 10 digits");
+	        label_PhoneValidation.setStyle("-fx-text-fill: orange;");
+	    } else if (input.length() == 10) {
+	        label_PhoneValidation.setText("✔ Valid phone number");
+	        label_PhoneValidation.setStyle("-fx-text-fill: green;");
+	    } else {
+	        label_PhoneValidation.setText("❌ Too many digits (must be 10)");
+	        label_PhoneValidation.setStyle("-fx-text-fill: red;");
+	    }
+	}
+
     public static void resetValidation() {
         label_UsernameValidation.setText("");
         label_PasswordStrength.setText("");						// password strength

@@ -18,7 +18,9 @@ public class ControllerFirstAdmin {
 	
 	private static String adminUsername = "";
 	private static String adminPassword1 = "";
-	private static String adminPassword2 = "";		
+	private static String adminPassword2 = "";	
+	private static String adminPhoneNumber = "";
+	
 	protected static Database theDatabase = applicationMain.FoundationsMain.database;		
 
 	/*-********************************************************************************************
@@ -63,6 +65,12 @@ public class ControllerFirstAdmin {
 	protected static void setAdminPassword2() {
 		adminPassword2 = ViewFirstAdmin.text_AdminPassword2.getText();		
 		ViewFirstAdmin.label_PasswordsDoNotMatch.setText("");
+
+	
+		
+	protected static void setAdminPhoneNumber() {
+	    adminPhoneNumber = ViewFirstAdmin.text_AdminPhoneNumber.getText();
+	}
 	}
 	
 	
@@ -87,6 +95,8 @@ public class ControllerFirstAdmin {
         	// Create the passwords and proceed to the user home page
         	User user = new User(adminUsername, adminPassword1, "", "", "", "", "", true, false, 
         			false);
+			user.setPhoneNumber(adminPhoneNumber);
+
             try {
             	// Create a new User object with admin role and register in the database
             	theDatabase.register(user);

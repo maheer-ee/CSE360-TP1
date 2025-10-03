@@ -28,6 +28,8 @@ public class User {
     private boolean adminRole;
     private boolean role1;
     private boolean role2;
+    private String phoneNumber;
+
     
     
     /*****
@@ -67,6 +69,7 @@ public class User {
         this.lastName = ln;
         this.preferredFirstName = pfn;
         this.emailAddress = ea;
+        this.phoneNumber = phoneNumber;
         this.adminRole = r1;
         this.role1 = r2;
         this.role2 = r3;
@@ -197,6 +200,9 @@ public class User {
      */
     // Gets the current value of the Student role attribute.
     public String getEmailAddress() { return emailAddress; }
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
 
     public void setUserName(String s) { userName = s; }
     public void setPassword(String s) { password = s; }
@@ -205,7 +211,7 @@ public class User {
     public void setLastName(String s) { lastName = s; }
     public void setPreferredFirstName(String s) { preferredFirstName = s; }
     public void setEmailAddress(String s) { emailAddress = s; }
-
+    public void setPhoneNumber(String phoneNumber) {this.phoneNumber = phoneNumber;}
     
     /*****
      * <p> Method: String getAdminRole() </p>
